@@ -1,13 +1,163 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Arief's Web Gallery</title>
+    
+    <!-- CSS Tailwind Lokal -->
     <link href="./dist/output.css" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Custom Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        
+        .fade-in { animation: fadeIn 0.5s ease-in-out; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
 </head>
-<body class="bg-slate-50 flex flex-col items-center justify-center min-h-screen">
-    <h1 class="text-4xl font-bold text-blue-600 mb-4">Arief's Web Gallery</h1>
-    <p class="text-slate-600">Project berhasil di-setup dengan Tailwind CSS!</p>
+<body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col">
+
+    <!-- Navbar -->
+    <nav class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center gap-2 cursor-pointer">
+                    <div class="bg-blue-500 text-white p-2 rounded-lg">
+                        <i data-lucide="layout-grid" class="w-6 h-6"></i>
+                    </div>
+                    <span class="font-bold text-xl tracking-tight text-slate-900">Arief's <span class="text-blue-600">Gallery</span></span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <main class="flex-grow">
+        <section class="relative px-4 pt-24 pb-20 sm:px-6 lg:px-8 max-w-7xl mx-auto text-center">
+            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-900 mb-6">
+                Eksplorasi Dunia <br class="hidden sm:block" />
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-indigo-600">Mini Web Apps</span>
+            </h1>
+            <p class="mt-4 max-w-2xl text-lg sm:text-xl text-slate-600 mx-auto mb-10">
+                Koleksi berbagai aplikasi web fungsional yang dikembangkan dengan murni JavaScript dan keindahan Tailwind CSS. Cepat, ringan, dan interaktif.
+            </p>
+            
+            <!-- Search Bar -->
+            <div class="max-w-xl mx-auto relative group">
+                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-blue-500 transition-colors">
+                    <i data-lucide="search" class="w-5 h-5"></i>
+                </div>
+                <input type="text" id="searchInput" placeholder="Cari aplikasi... (contoh: Kalkulator)" 
+                    class="block w-full pl-12 pr-4 py-4 border-2 border-slate-200 rounded-2xl text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all shadow-sm bg-white text-lg">
+            </div>
+        </section>
+
+        <!-- Apps Grid Section -->
+        <section id="apps" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            <div class="flex items-center justify-between mb-10">
+                <h2 class="text-2xl font-bold text-slate-900 flex items-center gap-2">
+                    <i data-lucide="layers" class="w-6 h-6 text-blue-500"></i>
+                    Semua Aplikasi
+                </h2>
+                <div class="text-sm text-slate-500 font-medium" id="appCount">
+                    Menampilkan 0 aplikasi
+                </div>
+            </div>
+
+            <!-- Grid Container -->
+            <div id="appGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+                <!-- App Cards di-inject oleh JS -->
+            </div>
+            
+            <!-- Empty State -->
+            <div id="emptyState" class="hidden text-center py-20">
+                <div class="inline-flex bg-slate-100 p-4 rounded-full mb-4 text-slate-400">
+                    <i data-lucide="search-x" class="w-10 h-10"></i>
+                </div>
+                <h3 class="text-lg font-semibold text-slate-900">Aplikasi tidak ditemukan</h3>
+                <p class="text-slate-500 mt-2">Coba gunakan kata kunci pencarian yang lain.</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-center text-slate-500 text-sm">
+            &copy; 2026 Dibuat di Workspace Arief. All rights reserved.
+        </div>
+    </footer>
+
+    <!-- JavaScript Logic -->
+    <script>
+        lucide.createIcons();
+
+        // Data Aplikasi Dummy
+        const appData = [
+            { id: 'kalkulator', title: 'Kalkulator', description: 'Operasi matematika dasar dengan UI bersih.', icon: 'calculator', color: 'bg-blue-50 text-blue-600' },
+            { id: 'todo', title: 'To-Do List', description: 'Kelola tugas harian agar lebih produktif.', icon: 'check-square', color: 'bg-green-50 text-green-600' },
+            { id: 'stopwatch', title: 'Stopwatch', description: 'Alat ukur waktu presisi.', icon: 'timer', color: 'bg-purple-50 text-purple-600' }
+        ];
+
+        const appGrid = document.getElementById('appGrid');
+        const searchInput = document.getElementById('searchInput');
+        const appCount = document.getElementById('appCount');
+        const emptyState = document.getElementById('emptyState');
+
+        function renderApps(apps) {
+            appGrid.innerHTML = '';
+            
+            if (apps.length === 0) {
+                appGrid.classList.add('hidden');
+                emptyState.classList.remove('hidden');
+            } else {
+                appGrid.classList.remove('hidden');
+                emptyState.classList.add('hidden');
+                
+                apps.forEach((app, index) => {
+                    appGrid.innerHTML += `
+                        <div class="group fade-in flex flex-col bg-white border border-slate-200 rounded-2xl overflow-hidden hover:shadow-xl transition-all duration-300" style="animation-delay: ${index * 0.1}s">
+                            <div class="p-6 flex-grow">
+                                <div class="p-3 rounded-xl w-fit ${app.color} mb-4">
+                                    <i data-lucide="${app.icon}" class="w-6 h-6"></i>
+                                </div>
+                                <h3 class="text-xl font-bold text-slate-900 mb-2 group-hover:text-blue-600 transition-colors">${app.title}</h3>
+                                <p class="text-slate-500 line-clamp-3">${app.description}</p>
+                            </div>
+                            <div class="px-6 py-4 border-t border-slate-100 bg-slate-50 flex items-center justify-between group-hover:bg-blue-50 transition-colors cursor-pointer">
+                                <span class="text-sm font-medium text-slate-500 group-hover:text-blue-600">Buka Aplikasi</span>
+                                <i data-lucide="arrow-right" class="w-4 h-4 text-slate-400 group-hover:text-blue-600 transform group-hover:translate-x-1 transition-all"></i>
+                            </div>
+                        </div>
+                    `;
+                });
+                lucide.createIcons();
+            }
+            appCount.textContent = `Menampilkan ${apps.length} aplikasi`;
+        }
+
+        renderApps(appData);
+
+        searchInput.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            const filteredApps = appData.filter(app => 
+                app.title.toLowerCase().includes(searchTerm) || 
+                app.description.toLowerCase().includes(searchTerm)
+            );
+            renderApps(filteredApps);
+        });
+    </script>
 </body>
 </html>
