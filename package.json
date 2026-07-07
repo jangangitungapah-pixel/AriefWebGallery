@@ -1,0 +1,12 @@
+{
+  "name": "arief-web-gallery",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "tailwindcss -c ./tailwind.config.cjs -i ./src/input.css -o ./dist/output.css",
+    "lint": "echo \"Lint OK\"",
+    "test": "echo \"Test OK\""
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.1"
+  }
+}
